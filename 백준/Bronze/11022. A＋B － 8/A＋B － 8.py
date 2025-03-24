@@ -1,6 +1,5 @@
-test_count=int(input())
+n = int(input())
 
-for i in range(1,test_count+1) :
-    A,B=map(int,input().split())
-    print(f"Case #{i}: {A} + {B} = {A+B}")
-
+for i in range(n):
+    a,b=map(int, input().split())
+    print(f"Case #{i+1}: {a} + {b} = {a+b}")

@@ -2,40 +2,61 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static class Country {
+        int id, gold, silver, bronze;
+
+        Country(int id, int gold, int silver, int bronze) {
+            this.id = id;
+            this.gold = gold;
+            this.silver = silver;
+            this.bronze = bronze;
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken()); // 국가의 수
-        int k = Integer.parseInt(st.nextToken()); // 등수를 알고싶은 국가
 
-        int[][] country = new int[n][4];
-        for(int i=0; i<n; i++){
+        int n = Integer.parseInt(st.nextToken()); // 국가 수
+        int k = Integer.parseInt(st.nextToken()); // 등수를 알고 싶은 국가
+
+        List<Country> list = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
-            for(int j=0; j<4; j++){
-                country[i][j] = Integer.parseInt(st.nextToken());
-            }
+            int id = Integer.parseInt(st.nextToken());
+            int g = Integer.parseInt(st.nextToken());
+            int s = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            list.add(new Country(id, g, s, b));
         }
 
-        Arrays.sort(country, (a, b) -> {
-            if(a[1] != b[1]) return Integer.compare(a[1], b[1]); // 금메달
-            else if(a[2] != b[2]) return Integer.compare(a[2], b[2]); // 은메달
-            return Integer.compare(a[3], b[3]); // 동메달
+        // 금, 은, 동 내림차순
+        list.sort((a, b) -> {
+            if (a.gold != b.gold) return b.gold - a.gold;
+            if (a.silver != b.silver) return b.silver - a.silver;
+            return b.bronze - a.bronze;
         });
 
         int rank = 1;
-        for (int i = 0; i < n; i++) {
-            if (country[i][0] == k) {
-                System.out.println(rank);
-                break;
+        int targetRank = 0;
+
+        for (int i = 0; i < list.size(); i++) {
+            if (i > 0) {
+                Country prev = list.get(i - 1);
+                Country curr = list.get(i);
+
+                if (curr.gold != prev.gold || curr.silver != prev.silver || curr.bronze != prev.bronze) {
+                    rank = i + 1;
+                }
             }
 
-            if (i > 0 && (
-                    country[i][1] != country[i - 1][1] ||
-                            country[i][2] != country[i - 1][2] ||
-                            country[i][3] != country[i - 1][3])) {
-                rank = i + 1;
+            if (list.get(i).id == k) {
+                targetRank = rank;
+                break;
             }
         }
+
+        System.out.println(targetRank);
     }
 }

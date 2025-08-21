@@ -30,9 +30,6 @@ public class Main {
         for(int i= list.size()-1; i>=0; i--){
             System.out.print(list.get(i) + " ");
         }
-
-
-
     }
 
     static int bfs(){
@@ -48,6 +45,7 @@ public class Main {
         // 3. 탐색
         while(!dq.isEmpty()){
             int cur = dq.poll();
+
 
             // 3-1. 종료 조건
             if(cur == e){
